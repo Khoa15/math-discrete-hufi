@@ -9,69 +9,70 @@ using namespace std;
 #define INF 9999
 template <typename T>
 class Graph{
-private:
+public:
     bool isDirect;
     bool isWeight;
     int v;// So dinh
     int e;// So canh
-    T G[][MAX];// Matrix
-public:
-    Graph<T>();
-    Graph<T>(int x, int y) : v(x), e(y) {}
+    int G[MAX][MAX];// Matrix
+    Graph();
+    Graph(int x, int y) : v(x), e(y) {}
 
     void init(bool isWei, bool isDir);
-    void show();
-
+    
     void getInput();
-    bool getFile(string filename);
+    void getFile(string filename);
+    void show();
 };
 
 template <class T>
-void Graph<T>::init(bool isWei, bool isDir){
+Graph<T>::Graph(){
     v = 0;
     e = 0;
+}
+
+template <class T>
+void Graph<T>::init(bool isWei, bool isDir){
     isWeight = isWei;
     isDirect = isDir;
     for(int i = 0; i < MAX; i++){
         for(int j = 0; j < MAX; j++){
-            G[i][j] = (isWeight == true) ? INF : 0;
+            G[i][j] = (isWei == true) ? 9999 : 0;
         }
-    }
-}
-
-template <class T>
-void Graph<T>::show(){
-    for(int i = 0; i < v; i++){
-        for(int j = 0; j < v; j++){
-            cout << G[i][j] << "\t";
-        }
-        cout << endl;
     }
 }
 
 template <class T>
 void Graph<T>::getInput(){
-    cin >> v;
-    cin >> e;
+    do{
+        cout << "Nhap so dinh: ";
+        cin >> v;
+    }while(v < 0);
+    do{
+        cout << "Nhap so canh: ";
+        cin >> e;
+    }while(e < 0);
     int x = 0,
         y = 0,
         val = 1;
     for(int i = 0; i < e; i++){
+        if(isDirect == true){
+            cout << "Nhap dinh x va y(x -> y): ";
+        }else cout << "Nhap dinh x va y: ";
         cin >> x >> y;
-        if(isWeight == true) cin >> val;
+        if(isWeight == true){
+            cout << "Nhap trong so: ";
+            cin >> val;
+        }
         G[x][y] = val;
         if(isDirect == true) G[y][x] = val;
     }
 }
 
 template <class T>
-bool Graph<T>::getFile(string filename){
+void Graph<T>::getFile(string filename){
     fstream FILE;
     FILE.open(filename, ios::in);
-    if(FILE.fail()){
-        cout << "Get OUT!!!" << endl;
-        return false;
-    }
     FILE >> v >> e;
     int x = 0,
         y = 0,
@@ -84,8 +85,18 @@ bool Graph<T>::getFile(string filename){
     }
 
     FILE.close();
-    return true;
 }
 
+template <class T>
+void Graph<T>::show(){
+    if(isDirect == true) cout << "Do thi co huong" << endl;
+    else cout << "Do thi vo huong" << endl;
 
+    for(int i = 0; i < v; i++){
+        for(int j = 0; j < v; j++){
+            cout << G[i][j] << "\t";
+        }
+        cout << endl;
+    }
+}
 #endif
