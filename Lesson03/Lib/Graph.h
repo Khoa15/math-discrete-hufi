@@ -77,7 +77,10 @@ void Graph<T>::getFile(string filename){
     for(int i = 0; i < v; i++){
         for(int j = 0; j < v; j++){
             FILE >> G[i][j];
-            if(isDirect == true) G[j][i] = G[i][j];
+            if(G[i][j] != 0 && G[i][j] != 100) e += 1;
+            if(isDirect == true){
+                G[j][i] = G[i][j];
+            }
         }
     }
     FILE.close();

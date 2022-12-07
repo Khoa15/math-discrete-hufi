@@ -1,6 +1,5 @@
-#include <bits/stdc++.h>
+#include <iostream>
 #include "Lib/Graph.h"
-#define INF 100;
 using namespace std;
 
 struct Edge{
@@ -9,6 +8,12 @@ struct Edge{
     Edge(int x, int y) : u(x), v(y) {}
     Edge(int x, int y, int z) : u(x), v(y), w(z) {}
 };
+
+void show(Edge edge[], int n){
+    for(int i = 0; i < n; i++){
+        cout << edge[i].u << " -> " << edge[i].v << ": " << edge[i].w << endl;
+    }
+}
 
 void sortEdge(Edge edge[], int n){
     for(int i = 0; i < n; i++){
@@ -73,59 +78,52 @@ int Prim(int s, Edge edge[], int n){
 }
 
 int main(){
-    Edge edge[12];
+    // int n, flag, x, iG = 0;
+    // fstream f;
+    // f.open("PRIM.INP");
+    // f >> flag >> n;
+    // Edge graph[n*n];
+    // for(int i = 0; i < n; i++){
+    //     for(int j = 0; j < n; j++){
+    //         f >> x;
+    //         if(x == 0 || x == INF) continue;
+    //         graph[iG].u = i;
+    //         graph[iG].v = j;
+    //         graph[iG].w = x;
+    //         iG += 1;
+    //     }
+    // }
+    // f.close();
+    // show(graph, iG);
+    // cout << Prim(0, graph, iG);
+    Graph<int> G;
+    G.getFile("PRIM.INP");
+    G.show();
 
-    edge[0].u = 1;
-    edge[0].v = 2;
-    edge[0].w = 3;
+    cout << "===============" << endl;
 
-    edge[1].u = 1;
-    edge[1].v = 5;
-    edge[1].w = 1;
-    
-    edge[2].u = 1;
-    edge[2].v = 3;
-    edge[2].w = 1;
+    bool S[G.v * G.v] = {false};
 
-    edge[3].u = 2;
-    edge[3].v = 5;
-    edge[3].w = 4;
+    S[1] = true;
+    int iS = 1;
+    while(iS < G.v){
+        int Mi = INF, y = 0, x = 0;
+        for(int i = 0; i < G.v; i++){
+            if(S[i] == false) continue;
+            for(int j = 0; j < G.v; j++){
+                if(G.G[i][j] == 0 || G.G[i][j] == INF || S[j] == true) continue;
+                if(Mi > G.G[i][j]){
+                    Mi = G.G[i][j];
+                    y = j;
+                    x = i;
+                }
+            }
+        }
 
-    edge[4].u = 5;
-    edge[4].v = 4;
-    edge[4].w = 2;
-
-    edge[5].u = 5;
-    edge[5].v = 3;
-    edge[5].w = 6;
-
-    edge[6].u = 5;
-    edge[6].v = 1;
-    edge[6].w = 1;
-
-    edge[7].u = 4;
-    edge[7].v = 5;
-    edge[7].w = 2;
-
-    edge[8].u = 4;
-    edge[8].v = 3;
-    edge[8].w = 5;
-
-    edge[9].u = 3;
-    edge[9].v = 5;
-    edge[9].w = 6;
-
-    edge[10].u = 3;
-    edge[10].v = 4;
-    edge[10].w = 5;
-
-    edge[11].u = 1;
-    edge[11].v = 3;
-    edge[11].w = 1;
-
-    int n = 11;
-
-    cout << Prim(1, edge, n);
+        cout << x + 1 << " - " << y + 1 << ": " << Mi << endl;
+        S[y] = true;
+        iS += 1;
+    }
 
     return 0;
 }
