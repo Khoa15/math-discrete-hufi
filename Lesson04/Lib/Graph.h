@@ -4,7 +4,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "Edge.h"
 using namespace std;
 #define MAX 50
 #define INF 9999
@@ -16,7 +15,6 @@ public:
     int v;// So dinh
     int e;// So canh
     int G[MAX][MAX];// Matrix
-    
     Graph();
     Graph(int x, int y) : v(x), e(y) {}
 
@@ -75,16 +73,17 @@ template <class T>
 void Graph<T>::getFile(string filename){
     fstream FILE;
     FILE.open(filename, ios::in);
-    FILE >> isDirect >> v;
-    for(int i = 0; i < v; i++){
-        for(int j = 0; j < v; j++){
-            FILE >> G[i][j];
-            if(G[i][j] != 0 && G[i][j] != 100) e += 1;
-            if(isDirect == true){
-                G[j][i] = G[i][j];
-            }
-        }
+    FILE >> v >> e;
+    int x = 0,
+        y = 0,
+        val = 0;
+    for(int i = 0; i < e; i++){
+        FILE >> x >> y;
+        if(isWeight == true) FILE >> val;
+        if(isDirect == true) G[y][x] = val;
+        G[x][y] = val;
     }
+
     FILE.close();
 }
 
