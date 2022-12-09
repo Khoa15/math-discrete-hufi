@@ -6,6 +6,28 @@ using namespace std;
 char* filename = "BAI_5.INP";
 char* file_bai_6 = "ONE.INP";
 
+int dfs(Edge<int> *E, int start, int end, int n){
+    stack<Edge<int>> stk;
+    stk.push(E[0]);
+    int VertexStart = start;
+    int cost = 0;
+    while(stk.empty() == false){
+        Edge<int> edge = stk.top();
+        if(edge.u == VertexStart || edge.v == VertexStart) cost = 0;
+        cost += edge.w;
+        if(edge.u == end || edge.v == end) break;
+        stk.pop();
+
+        for(int i = 0; i < n - 1;i++){
+            if(E[i].u == edge.u || E[i].u == edge.v || E[i].v == edge.u || E[i].v == edge.v){
+                stk.push(E[i]);
+            }
+        }
+    }
+
+    return cost;
+}
+
 int main(){
     GraphEdge<int> *G = NULL;
     
@@ -23,47 +45,29 @@ int main(){
             G->showEdge(G->E);
             cout << G->Prim(2) << endl;
             cout << " --- " << endl;
-            bool Visisted[G->n + 1] = {false};
-            int iVisisted = 1;
+            Edge<int> *E = G->E;
             stack<Edge<int>> stk;
-            stk.push(G->SpanningTree[0]);
+            stk.push(G->E[0]);
             int current = 2;
-            int tmp_cost = 0;
+            bool Visisted[G->n + 1] = {false};
+            Visisted[current] = true;
+            int cost = 0;
             while(stk.empty() == false){
-                Edge<int> edge = stk.top();
-                if(current == edge.v) current = edge.u;
-                cost += edge.w;
-                stk.pop();
-                if(current != edge.u){
-                    // edge is U
-                    // find path from U to V
-                    stack<Edge<int>> stk2;
-                    stk2.push(edge);
-                    int curr = edge.u;
-                    while(stk2.empty() == false){
-                        Edge<int> edge_tmp = stk2.top();
-                        if(edge_tmp.u == curr) tmp_cost = 0;
-                        tmp_cost += edge_tmp.w;
-                        stk2.pop();
-                        
-                        for(int i = 0; i < G->n - 1;i++){
-                            if(G->SpanningTree[i].u == edge_tmp.u && G->SpanningTree[i].v == edge_tmp.v) continue;
-                            if(G->SpanningTree[i].u == edge_tmp.v || G->SpanningTree[i].u == edge_tmp.u
-                            || G->SpanningTree[i].v == edge_tmp.v || G->SpanningTree[i].v == edge_tmp.u){
-                                stk2.push(G->SpanningTree[i]);
-                            }
-                        }
-                        if(stk2.top().u == current || stk2.top().v == current){
-                            break;
-                        }
-                    }
+                Edge<int> e = stk.top();
+                if(Visisted[e.u] == true) current = e.v;
+                else current = e.u;
+                Visisted[current] = true;
+
+                if(e.u == current || e.v == current){
+                    cout << " HI";
                 }
-                cost += tmp_cost;
-                for(int i = 0; i < G->n - 1;i++){
-                    if(G->SpanningTree[i].u == edge.u && G->SpanningTree[i].v == edge.v) continue;
-                    if(G->SpanningTree[i].u == edge.v || G->SpanningTree[i].u == edge.u
-                            || G->SpanningTree[i].v == edge.v || G->SpanningTree[i].v == edge.u){
-                        stk.push(G->SpanningTree[i]);
+                cost += e.w;
+                stk.pop();
+
+                for(int i = 0; i < G->n - 1; i++){
+                    if(Visisted[E[i].u] == true && Visisted[E[i].v] == true) continue;
+                    if(E[i].u == e.u || E[i].u == e.v || E[i].v == e.u || E[i].v == e.v){
+                        stk.push(E[i]);
                     }
                 }
             }
