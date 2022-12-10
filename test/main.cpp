@@ -79,13 +79,23 @@ int main(){
     GraphEdge<int> *G = NULL;
     GraphEdge<int> *NetG = NULL;
     
-    int option = 7;
-    int cost = 0;
+    int option = 5;
+    int cost = 0, n, m;
 
+    Menu();
+    cout << "Enter your option: ";
+    cin >> option;
     switch (option)
     {
     case 5:
-        /* code */
+        cin >> n >> m;
+        G = new GraphEdge<int>(n, m);
+        for(int i = 0; i < m; i++){
+            cin >> G->E[i].u >> G->E[i].v >> G->E[i].w;
+        }
+
+        cout << G->Prim(1);
+
         break;
     case 6:
      {
