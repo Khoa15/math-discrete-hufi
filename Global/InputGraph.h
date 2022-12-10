@@ -26,8 +26,6 @@ GraphEdge<T> *getInputEdge(char *filename, GraphEdge<T> *G){
     {
         return NULL;
     }
-    
-
     return G;
 }
 #endif

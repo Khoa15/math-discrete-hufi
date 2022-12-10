@@ -1,11 +1,13 @@
 #include <iostream>
 #include <stack>
+#include <fstream>
+#include <string.h>
 #include "../Global/GraphEdge.h"
 #include "../Global/InputGraph.h"
 using namespace std;
-char* filename = "BAI_5.INP";
+char* file_bai_5 = "BAI_5.INP";
 char* file_bai_6 = "ONE.INP";
-
+char* file_bai_7 = "BAI_7.INP";
 int dfs(Edge<int> *E, int start, int end, int n){
     stack<Edge<int>> stk;
     stk.push(E[0]);
@@ -28,11 +30,45 @@ int dfs(Edge<int> *E, int start, int end, int n){
     return cost;
 }
 
+GraphEdge<int>* getInputPracticle7(char* filename, GraphEdge<int> *G){
+    fstream FILE;
+    FILE.open(filename, ios::in);
+    if(FILE.is_open() == false) return NULL;
+
+    try
+    {
+        int n;
+        FILE >> n;
+        if(G == NULL){
+            G = new GraphEdge<int>(n, n*n);
+        }else{
+            G->n = n;
+        }
+        int x = 0, m = 0;
+        for(int i = 0; i < G->n; i++){
+            for(int j = 0; j < G->n; j++){
+                FILE >> x;
+                if(j < i) continue;
+                if(x == 0) continue;
+                G->E[m].u = i + 1;
+                G->E[m].v = j + 1;
+                G->E[m].w = x;
+                m += 1;
+            }
+        }
+        G->m = m;
+    }
+    catch(const std::exception& e)
+    {
+        return NULL;
+    }
+    return G;
+}
 int main(){
     GraphEdge<int> *G = NULL;
+    GraphEdge<int> *NetG = NULL;
     
-    G = getInputEdge(filename, G);
-    int option = 6;
+    int option = 7;
     int cost = 0;
 
     switch (option)
@@ -41,7 +77,8 @@ int main(){
         /* code */
         break;
     case 6:
-     {       G = getInputEdge(file_bai_6, G);
+     {       
+            G = getInputEdge(file_bai_6, G);
             G->showEdge(G->E);
             cout << G->Prim(2) << endl;
             cout << " --- " << endl;
@@ -54,12 +91,17 @@ int main(){
             int cost = 0;
             while(stk.empty() == false){
                 Edge<int> e = stk.top();
+                int s = 0;
+                bool flag = false;
+                if(e.u != current && e.v != current){
+                    s = current;
+                    flag = true;
+                }
                 if(Visisted[e.u] == true) current = e.v;
                 else current = e.u;
                 Visisted[current] = true;
-
-                if(e.u == current || e.v == current){
-                    cout << " HI";
+                if(flag == true){
+                    cost += dfs(G->E, s, (Visisted[e.u] == true) ? e.u : e.v, G->n);
                 }
                 cost += e.w;
                 stk.pop();
@@ -73,11 +115,15 @@ int main(){
             }
 
             cout << cost;
-
         break;
     }
     case 7:
+    {
+        NetG = getInputPracticle7(file_bai_7, NetG);
+        NetG->showEdge(NetG->E);
+        cout << NetG->Prim(1);
         break;
+    }
     default:
         break;
     }

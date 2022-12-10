@@ -13,6 +13,7 @@ public:
     Edge<T>* E;
     Edge<T>* SpanningTree;
     GraphEdge() : n(0), m(0), E(NULL), SpanningTree(NULL) {}
+    GraphEdge(int x) : n(x), m(0), E(NULL), SpanningTree(NULL) {}
     GraphEdge(int x, int y) : n(x), m(y), E(new Edge<T>[y]), SpanningTree(NULL) {}
 
     ~GraphEdge(){
