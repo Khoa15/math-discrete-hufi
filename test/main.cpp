@@ -64,6 +64,17 @@ GraphEdge<int>* getInputPracticle7(char* filename, GraphEdge<int> *G){
     }
     return G;
 }
+
+void Menu(){
+    cout
+        << "===========" << endl
+        << "Bai 4" << endl
+        << "Bai 5" << endl
+        << "Bai 6" << endl
+        << "Bai 7" << endl
+        << "===========" << endl;
+}
+
 int main(){
     GraphEdge<int> *G = NULL;
     GraphEdge<int> *NetG = NULL;
@@ -77,7 +88,7 @@ int main(){
         /* code */
         break;
     case 6:
-     {       
+     {
             G = getInputEdge(file_bai_6, G);
             G->showEdge(G->E);
             cout << G->Prim(2) << endl;
