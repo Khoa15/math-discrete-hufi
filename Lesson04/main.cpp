@@ -4,25 +4,15 @@
 
 using namespace std;
 
-void Hamilton(Graph G, int start, int j){
-    stack<int> stk;
-    bool visited[G.v + 1] = {false};
-    stk.push(start);
-    visited[start] = true;
-    int last_vertex = start;
-    while(stk.empty() == false){
-        int s = stk.top();
-        stk.pop();
-        cout << s << "\t";
-        for(int i = 0; i < G.v; i++){
-            if(G.W[s][i] == 0 || visited[i+1] == true) continue;
-            last_vertex = i+1;
-            visited[i+1] = true;
-            stk.push(i+1);
-        }
-    }
-    if(last_vertex != start){
-        cout << "The graph haven't hamilton circuit\n";
+void Hamilton(Graph G, int start, int* vertex, int n, bool visited[]){
+    if(n >= G.v) cout << endl;
+    for(int i = 0; i < G.v;i++){
+        if(G.W[start][i] == 0 || visited[i]) continue;
+        cout << i + 1 << "\t";
+        visited[i] = false;
+        vertex[n] = i;
+        Hamilton(G, i, vertex, n + 1, visited);
+        visited[i] = true;
     }
 }
 
@@ -34,7 +24,10 @@ int main(){
     G.show();
 
     cout << "===========\n";
-
-    Hamilton(G, 4, 06);
+    bool visited[G.v] = {false};
+    int vertex[G.v] = {0};
+    vertex[0] = 1;
+    visited[0] = true;
+    Hamilton(G, 0, vertex, 1, visited);
     return 0;
 }
