@@ -7,14 +7,13 @@
 using namespace std;
 #define MAX 50
 #define INF 9999
-template <typename T>
 class Graph{
 public:
     bool isDirect;
     bool isWeight;
     int v;// So dinh
     int e;// So canh
-    int G[MAX][MAX];// Matrix
+    int W[MAX][MAX];// Matrix
     Graph();
     Graph(int x, int y) : v(x), e(y) {}
 
@@ -25,25 +24,22 @@ public:
     void show();
 };
 
-template <class T>
-Graph<T>::Graph(){
+Graph::Graph(){
     v = 0;
     e = 0;
 }
 
-template <class T>
-void Graph<T>::init(bool isWei, bool isDir){
+void Graph::init(bool isWei, bool isDir){
     isWeight = isWei;
     isDirect = isDir;
     for(int i = 0; i < MAX; i++){
         for(int j = 0; j < MAX; j++){
-            G[i][j] = (isWei == true) ? 9999 : 0;
+            W[i][j] = (isWei == true) ? 9999 : 0;
         }
     }
 }
 
-template <class T>
-void Graph<T>::getInput(){
+void Graph::getInput(){
     do{
         cout << "Nhap so dinh: ";
         cin >> v;
@@ -64,37 +60,32 @@ void Graph<T>::getInput(){
             cout << "Nhap trong so: ";
             cin >> val;
         }
-        G[x][y] = val;
-        if(isDirect == true) G[y][x] = val;
+        W[x][y] = val;
+        if(isDirect == true) W[y][x] = val;
     }
 }
 
-template <class T>
-void Graph<T>::getFile(string filename){
+void Graph::getFile(string filename){
     fstream FILE;
     FILE.open(filename, ios::in);
-    FILE >> v >> e;
-    int x = 0,
-        y = 0,
-        val = 0;
-    for(int i = 0; i < e; i++){
-        FILE >> x >> y;
-        if(isWeight == true) FILE >> val;
-        if(isDirect == true) G[y][x] = val;
-        G[x][y] = val;
+    FILE >> isDirect >> v;
+    for(int i = 0; i < v; i++){
+        for(int j = 0; j < v; j++){
+            FILE >> W[i][j];
+            if(W[i][j] != 0) e += 1;
+        }
     }
 
     FILE.close();
 }
 
-template <class T>
-void Graph<T>::show(){
+void Graph::show(){
     if(isDirect == true) cout << "Do thi co huong" << endl;
     else cout << "Do thi vo huong" << endl;
 
     for(int i = 0; i < v; i++){
         for(int j = 0; j < v; j++){
-            cout << G[i][j] << "\t";
+            cout << W[i][j] << "\t";
         }
         cout << endl;
     }
